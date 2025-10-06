@@ -74,7 +74,7 @@ export default function AdminPage() {
       return
     }
     
-    const newSocket = io('http://localhost:3000', {
+    const newSocket = io(process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3000', {
       auth: {
         token: token
       }
