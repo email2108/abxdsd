@@ -2,11 +2,11 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch GLXD Next.js Dev Server",
+      "name": "Launch GLXD Custom Dev Server",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/GLXD/node_modules/.bin/next",
-      "args": ["dev"],
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
       "cwd": "${workspaceFolder}/GLXD",
       "env": {
         "NODE_ENV": "development"

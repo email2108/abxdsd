@@ -103,8 +103,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'OTP đã được gửi',
-      // Chỉ trả về OTP trong môi trường development để test
-      otp: process.env.NODE_ENV === 'development' ? otpCode : undefined
+      // Tạm thời trả về OTP để login
+      otp: otpCode
     })
   } catch (error) {
     console.error('Error sending OTP:', error)
