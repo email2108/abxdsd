@@ -10,6 +10,7 @@ import { ReferralAnalytics } from '@/components/referral/referral-analytics'
 import { OtpVerification } from '@/components/auth/otp-verification'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { signIn } from 'next-auth/react'
 import { Users, TrendingUp, Gift, DollarSign, BarChart3, LogOut, User, Award } from 'lucide-react'
 
 interface Referral {
@@ -194,6 +195,21 @@ export function ReferralDashboard() {
               />
             </TabsContent>
           </Tabs>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Hoặc tiếp tục với
+              </span>
+            </div>
+          </div>
+
+          <Button variant="outline" className="w-full" onClick={() => signIn('google')}>
+            Đăng nhập với Google
+          </Button>
         </div>
       </div>
     )
