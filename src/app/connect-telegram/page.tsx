@@ -1,32 +1,55 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { useAuth } from '@/context/AuthContext' // Corrected path
 
 export default function ConnectTelegramPage() {
+  const { user } = useAuth()
   const [telegramChatId, setTelegramChatId] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
+  useEffect(() => {
+    if (!user) {
+      // Handle case where user is not logged in, maybe redirect
+      console.error('User not logged in');
+    }
+  }, [user]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!user) {
+      setError('Bạn phải đăng nhập để thực hiện hành động này.');
+      return;
+    }
+
     setLoading(true)
     setError('')
     setSuccess('')
 
-    // API call will be implemented later
     try {
-      // Placeholder for API call
-      console.log('Saving Telegram Chat ID:', telegramChatId)
-      await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate network delay
+      const response = await fetch('/api/user/connect-telegram', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user.id, telegramChatId }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Không thể lưu ID.');
+      }
+
       setSuccess('Đã lưu ID Telegram thành công!')
     } catch (err) {
-      setError('Không thể lưu ID. Vui lòng thử lại.')
+      setError(err instanceof Error ? err.message : 'Vui lòng thử lại.')
     } finally {
       setLoading(false)
     }
@@ -68,7 +91,7 @@ export default function ConnectTelegramPage() {
             {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
             {success && <Alert variant="success"><AlertDescription>{success}</AlertDescription></Alert>}
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full" disabled={loading || !user}>
               {loading ? 'Đang lưu...' : 'Lưu liên kết'}
             </Button>
           </form>
